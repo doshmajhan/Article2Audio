@@ -1,0 +1,50 @@
+/**
+ * Created by MC on 8/11/2015.
+ */
+
+import com.sun.speech.freetts.*;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import java.io.*;
+
+public class Scraper {
+    public Scraper(){
+
+    }
+    public static void main(String[] args) {
+
+        String title = "";
+        String mainArticle = "";
+        try {
+            Document doc = Jsoup.connect("http://www.nytimes.com/2015/08/19/us/a-culture-clash-over-guns-infiltrates-the-backcountry.html?ref=us").get();
+            title = doc.title();
+            System.out.println(title);
+            Elements article = doc.select("div.story-body");
+            for(Element body : article.select("p.story-body-text.story-content")){
+                mainArticle += ("\n" + body.text());
+                //System.out.println(body.text());
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        System.out.println(mainArticle);
+
+        String VOICENAME = "kevin16";
+        Voice voice;
+        VoiceManager vm = VoiceManager.getInstance();
+        voice = vm.getVoice(VOICENAME);
+
+        voice.allocate();
+
+        try{
+            //voice.speak(title);
+        }catch (Exception e){
+            e.printStackTrace();
+            System.out.println("Couldn't speak");
+        }
+
+    }
+}
